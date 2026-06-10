@@ -137,7 +137,12 @@ export function computeKillSheet(input: KillSheetInput): KillSheetResult {
   if (input.pitGainBbl && input.bhaAnnularCapacityBblFt && input.bhaAnnularCapacityBblFt > 0) {
     influxHeightFt = input.pitGainBbl / input.bhaAnnularCapacityBblFt;
     influxGradientPsiFt = gradient - (input.sicpPsi - input.sidppPsi) / influxHeightFt;
-    if (influxGradientPsiFt < 0.25) influxType = "gas";
+    if (influxGradientPsiFt < 0) {
+      influxType = "unknown";
+      warnings.push(
+        "Computed influx gradient is negative — check SIDPP, SICP and pit gain inputs.",
+      );
+    } else if (influxGradientPsiFt < 0.25) influxType = "gas";
     else if (influxGradientPsiFt < 0.4) influxType = "oil / gas-cut mud";
     else if (influxGradientPsiFt <= 0.5) influxType = "water";
     else influxType = "unknown";

@@ -185,6 +185,13 @@ export function computeBalancedPlug(input: BalancedPlugInput): BalancedPlugResul
   const tocWithPipeMd = input.plugBaseMd - wetPlugLengthFt;
   const tocFinalMd = input.plugBaseMd - input.plugLengthFt;
 
+  if (wetPlugLengthFt > input.plugBaseMd) {
+    warnings.push(
+      "Wet plug length exceeds the plug base depth — slurry would reach surface with the pipe " +
+        "in the hole. Reduce the plug length or slurry volume.",
+    );
+  }
+
   if (input.stingerLengthFt !== undefined && wetPlugLengthFt > input.stingerLengthFt) {
     warnings.push(
       `Wet plug length (${wetPlugLengthFt.toFixed(0)} ft) is longer than the stinger ` +
@@ -219,7 +226,14 @@ export function computeBalancedPlug(input: BalancedPlugInput): BalancedPlugResul
   } else {
     pipeVolumeToLevel = stingerCap * balancedLevelMd;
   }
-  const displacementBbl = pipeVolumeToLevel - spacerBehindBbl;
+  const displacementRaw = pipeVolumeToLevel - spacerBehindBbl;
+  if (displacementRaw < 0) {
+    warnings.push(
+      "Computed displacement is negative — the spacer behind exceeds the pipe volume above the " +
+        "balanced level. Check the plug length, spacer and pipe sizes.",
+    );
+  }
+  const displacementBbl = Math.max(0, displacementRaw);
 
   return {
     zones: breakdown,

@@ -25,18 +25,7 @@ export const C = {
   ok: "#34D399",
 };
 
-export function fmt(x: number | undefined | null, dp = 2): string {
-  if (x === undefined || x === null || !isFinite(x)) return "—";
-  const r = x.toFixed(dp);
-  // trim trailing zeros but keep at least one decimal when dp > 0
-  return r.replace(/\.?0+$/, (m) => (m.startsWith(".") ? "" : m));
-}
-
-export function num(s: string): number | undefined {
-  if (s.trim() === "") return undefined;
-  const v = Number(s.replace(",", "."));
-  return isFinite(v) ? v : undefined;
-}
+export { fmt, num } from "@/lib/format";
 
 export function Screen({ children }: { children: React.ReactNode }) {
   const insets = useSafeAreaInsets();

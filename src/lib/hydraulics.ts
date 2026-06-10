@@ -180,6 +180,12 @@ export function computeHydraulics(input: HydraulicsInput): HydraulicsResult {
   let annulusPsi = 0;
   let annulusVolumeBbl = 0;
   for (const s of segs) {
+    if (s.pipeOdIn >= s.holeIdIn) {
+      warnings.push(
+        `Pipe OD ${s.pipeOdIn}" does not fit inside ${s.holeName} (ID ${s.holeIdIn}") — ` +
+          "annulus section contributes no loss. Check the well configuration.",
+      );
+    }
     const r = annulusLoss(rho, pv, yp, q, s.holeIdIn, s.pipeOdIn, s.lengthFt);
     annulusPsi += r.dPsi;
     annulusVolumeBbl += s.volumeBbl;
