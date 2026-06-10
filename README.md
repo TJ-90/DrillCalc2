@@ -34,16 +34,16 @@ and the Amoco/API Bingham-plastic hydraulics equations.
 - Bingham pipe laminar ΔP = PV·L·v/(1500·d²) + YP·L/(225·d); turbulent ΔP = ρ^0.75 v^1.75 PV^0.25 L / (1800 d^1.25) (annulus constants 1000/200/1396)
 - ECD = MW + ΣΔP_annulus / (0.052 × TVD)
 
-The engine is pure TypeScript in [`src/lib`](src/lib) with **76 unit tests**
-([`src/lib/__tests__`](src/lib/__tests__)) verified against hand-worked textbook examples.
+The engine is pure TypeScript in [`src/lib`](src/lib) with **85 unit tests**
+([`src/lib/__tests__`](src/lib/__tests__), Jest) verified against hand-worked textbook examples.
 
 ## Development
 
 ```bash
-bun install
-bun run start        # Expo dev server (scan QR with Expo Go)
-bun test             # engine unit tests
-bun run typecheck    # tsc --noEmit
+npm install
+npm start            # Expo dev server (scan QR with Expo Go)
+npm test             # engine unit tests (Jest)
+npm run typecheck    # tsc --noEmit
 ```
 
 ## CI builds (GitHub Actions)

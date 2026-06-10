@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "@jest/globals";
 import { computeBalancedPlug } from "../cementplug";
 
 // Common geometry: 3-1/2" stinger (ID 2.764) in 8-1/2" open hole / 9-5/8" 47# casing (ID 8.681)

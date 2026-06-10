@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "@jest/globals";
 import { computeBalancedPlug } from "../cementplug";
 import { fmt, num } from "../format";
 import { computeHydraulics } from "../hydraulics";

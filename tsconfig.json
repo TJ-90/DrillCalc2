@@ -2,7 +2,6 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "types": ["bun", "react", "node"],
     "paths": {
       "@/*": [
         "./src/*"
