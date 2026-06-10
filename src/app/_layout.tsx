@@ -1,15 +1,32 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import { useColorScheme } from 'react-native';
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { C } from "@/components/ui";
+import { WellProvider } from "@/store/well";
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function RootLayout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <WellProvider>
+      <StatusBar style="light" />
+      <Stack
+        screenOptions={{
+          headerStyle: { backgroundColor: C.bg },
+          headerTintColor: C.text,
+          headerTitleStyle: { fontWeight: "700" },
+          contentStyle: { backgroundColor: C.bg },
+        }}
+      >
+        <Stack.Screen name="index" options={{ title: "DrillCalc" }} />
+        <Stack.Screen name="well-config" options={{ title: "Well Configuration" }} />
+        <Stack.Screen name="killsheet" options={{ title: "Kill Sheet" }} />
+        <Stack.Screen name="nozzles" options={{ title: "Bit Nozzles / TFA" }} />
+        <Stack.Screen name="mud-wbm" options={{ title: "WBM Mixing" }} />
+        <Stack.Screen name="mud-obm" options={{ title: "OBM Mixing" }} />
+        <Stack.Screen name="jarring" options={{ title: "Jarring Weights" }} />
+        <Stack.Screen name="balanced-plug" options={{ title: "Balanced Cement Plug" }} />
+        <Stack.Screen name="cement-conventional" options={{ title: "Casing Cementation" }} />
+        <Stack.Screen name="cement-stabin" options={{ title: "Stab-in Cementation" }} />
+        <Stack.Screen name="hydraulics" options={{ title: "Mud Hydraulics" }} />
+      </Stack>
+    </WellProvider>
   );
 }

@@ -1,56 +1,66 @@
-# Welcome to your Expo app 👋
+# DrillCalc
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Drilling field calculators for iOS and Android, built with Expo (React Native + TypeScript).
+All calculations use API field units (ft, in, ppg, psi, bbl, gpm) and follow the standard
+formulas from Lapeyrouse *Formulas and Calculations for Drilling, Production and Workover*
+and the Amoco/API Bingham-plastic hydraulics equations.
 
-## Get started
+[![Build](https://github.com/TJ-90/DrillCalc2/actions/workflows/build.yml/badge.svg)](https://github.com/TJ-90/DrillCalc2/actions/workflows/build.yml)
 
-1. Install dependencies
+## Calculators
 
-   ```bash
-   npm install
-   ```
+| Calculator | What it does |
+| --- | --- |
+| **Kill Sheet** | Vertical/directional toggle (MD inputs only appear for directional wells). KMW, ICP, FCP, MAASP, strokes & times, influx characterization, ICP→FCP step-down schedule. |
+| **Bit Nozzles / TFA** | TFA from nozzle sizes in 32nds, nozzle ΔP across a list of GPMs, jet velocity, HHP, HSI, impact force. |
+| **WBM Mixing** | Weight-up with barite / CaCO₃ / hematite, dilution, blending two muds (incl. solve-for-volume). |
+| **OBM Mixing** | Build an OBM recipe (base oil + brine + barite) for any oil/water ratio and density; adjust OWR from retort data. |
+| **Jarring Weights** | Up/down jarring and cock-up/cock-down weight-indicator targets, with buoyancy, drag and pump-open force. |
+| **Balanced Cement Plug** | All four cases: entirely open hole, entirely cased, across the casing shoe, across a liner top. Sacks, spacer-behind balance, displacement, TOC with pipe in/out. |
+| **Casing Cementation** | Conventional two-plug job: rathole + OH annulus (excess) + cased annulus + shoe track, displacement to bump, lift pressure. |
+| **Stab-in Cementation** | Inner-string job through drill pipe stabbed into the float collar. |
+| **Mud Hydraulics** | Bingham-plastic system losses per section (surface, string, bit, annulus), expected pump pressure, ECD, bottoms-up time. |
+| **Well Configuration** | Drill string components (OD/ID/ppf/length) and casing/hole sections with a quick-add catalog. Feeds volumes to the kill sheet and hydraulics. |
 
-2. Start the app
+## Key formulas implemented
 
-   ```bash
-   npx expo start
-   ```
+- Capacity (bbl/ft) = ID² / 1029.4; annular capacity = (D₂² − D₁²) / 1029.4
+- Kill mud weight = OMW + SIDPP / (0.052 × TVD)
+- ICP = SIDPP + SCRP; FCP = SCRP × KMW / OMW
+- TFA = Σ π/4 × (d/32)²; bit ΔP = MW·Q² / (12031·Cd²·TFA²), Cd = 0.95
+- Barite weight-up: sx/100 bbl = 1470 (W₂ − W₁) / (35 − W₂)
+- OBM barite volume: V_b = V_f (W_t − W_l) / (35 − W_l), W_l = f_o·W_o + f_w·W_w
+- Balanced plug: spacer behind = spacer ahead × C_pipe / C_annulus
+- Bingham pipe laminar ΔP = PV·L·v/(1500·d²) + YP·L/(225·d); turbulent ΔP = ρ^0.75 v^1.75 PV^0.25 L / (1800 d^1.25) (annulus constants 1000/200/1396)
+- ECD = MW + ΣΔP_annulus / (0.052 × TVD)
 
-In the output, you'll find options to open the app in a
+The engine is pure TypeScript in [`src/lib`](src/lib) with **76 unit tests**
+([`src/lib/__tests__`](src/lib/__tests__)) verified against hand-worked textbook examples.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Development
 
 ```bash
-npm run reset-project
+bun install
+bun run start        # Expo dev server (scan QR with Expo Go)
+bun test             # engine unit tests
+bun run typecheck    # tsc --noEmit
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## CI builds (GitHub Actions)
 
-### Other setup steps
+Every push to `main` runs [build.yml](.github/workflows/build.yml):
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+1. **test** — TypeScript check + engine unit tests
+2. **android** — `expo prebuild` + Gradle release build → installable APK artifact (debug-signed)
+3. **ios** — `expo prebuild` + `xcodebuild` without code signing → unsigned `.ipa` artifact
 
-## Learn more
+Download artifacts from the Actions run page. For store distribution:
 
-To learn more about developing your project with Expo, look at the following resources:
+- **Play Store**: sign the AAB/APK with your upload key (or switch the workflow to `bundleRelease`).
+- **App Store**: the unsigned IPA proves the build; submitting requires an Apple Developer
+  account — easiest path is [EAS Build](https://docs.expo.dev/build/introduction/) (`eas build -p ios`).
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Disclaimer
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Field estimates only. Always verify against your operator's approved kill sheet,
+cementing program and jar operating manual before operational use.
