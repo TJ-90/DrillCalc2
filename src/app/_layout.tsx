@@ -19,8 +19,7 @@ export default function RootLayout() {
         <Stack.Screen name="well-config" options={{ title: "Well Configuration" }} />
         <Stack.Screen name="killsheet" options={{ title: "Kill Sheet" }} />
         <Stack.Screen name="nozzles" options={{ title: "Bit Nozzles / TFA" }} />
-        <Stack.Screen name="mud-wbm" options={{ title: "WBM Mixing" }} />
-        <Stack.Screen name="mud-obm" options={{ title: "OBM Mixing" }} />
+        <Stack.Screen name="mud-engineering" options={{ title: "Mud Engineering Calculator" }} />
         <Stack.Screen name="jarring" options={{ title: "Jarring Weights" }} />
         <Stack.Screen name="balanced-plug" options={{ title: "Balanced Cement Plug" }} />
         <Stack.Screen name="cement-conventional" options={{ title: "Casing Cementation" }} />

@@ -13,8 +13,7 @@ and the Amoco/API Bingham-plastic hydraulics equations.
 | --- | --- |
 | **Kill Sheet** | Vertical/directional toggle (MD inputs only appear for directional wells). KMW, ICP, FCP, MAASP, strokes & times, influx characterization, ICP→FCP step-down schedule. |
 | **Bit Nozzles / TFA** | TFA from nozzle sizes in 32nds, nozzle ΔP across a list of GPMs, jet velocity, HHP, HSI, impact force. |
-| **WBM Mixing** | Weight-up with barite / CaCO₃ / hematite, dilution, blending two muds (incl. solve-for-volume). |
-| **OBM Mixing** | Build an OBM recipe (base oil + brine + barite) for any oil/water ratio and density; adjust OWR from retort data. |
+| **Mud Engineering Calculator** | Faithful port of MUDCALCU.EXE (Bruce Guthrie / Baroid). 13 functions — Weight Up (volume increase / constant volume), Cut Mud Weight (volume increase / constant volume), Mix two/three muds, Adjust OWR, Add Barite (MT), Add water / base fluid to oil mud, Suspected water contamination, Mix WBM, Mix OBM, Slug displacement. Density in PPG / SG / PSI per 1000 ft; volume in bbls / m³; barite in MT. Captions reproduced verbatim from the original. |
 | **Jarring Weights** | Up/down jarring and cock-up/cock-down weight-indicator targets, with buoyancy, drag and pump-open force. |
 | **Balanced Cement Plug** | All four cases: entirely open hole, entirely cased, across the casing shoe, across a liner top. Sacks, spacer-behind balance, displacement, TOC with pipe in/out. |
 | **Casing Cementation** | Conventional two-plug job: rathole + OH annulus (excess) + cased annulus + shoe track, displacement to bump, lift pressure. |
@@ -34,7 +33,7 @@ and the Amoco/API Bingham-plastic hydraulics equations.
 - Bingham pipe laminar ΔP = PV·L·v/(1500·d²) + YP·L/(225·d); turbulent ΔP = ρ^0.75 v^1.75 PV^0.25 L / (1800 d^1.25) (annulus constants 1000/200/1396)
 - ECD = MW + ΣΔP_annulus / (0.052 × TVD)
 
-The engine is pure TypeScript in [`src/lib`](src/lib) with **85 unit tests**
+The engine is pure TypeScript in [`src/lib`](src/lib) with **89 unit tests**
 ([`src/lib/__tests__`](src/lib/__tests__), Jest) verified against hand-worked textbook examples.
 
 ## Development
